@@ -31,6 +31,18 @@ class OknoModel extends Model
     return ($t > 0);
 
     }
+    
+    public function getEmptyWindows() {
+            // Pobieranie okien, które nie mają przypisanych cech
+            $this->db->select('okna.id, okna.nazwa, COUNT(przypisane_cechy.okno_johariego) as licznik_cech');
+            $this->db->from('okna');
+            $this->db->join('przypisane_cechy', 'okna.hash = przypisane_cechy.okno_johariego', 'left');
+            $this->db->group_by('okna.id');
+            $this->db->having('licznik_cech', 0);
 
+            $query = $this->db->get();
+            return $query->result();
+        }
+    
 
 }
